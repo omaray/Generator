@@ -1,0 +1,120 @@
+package com.google.example;
+
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.List;
+
+public class %service%Client {
+
+	private static final Logger logger = Logger.getLogger(%service%Client.class.getName());
+
+	private final ManagedChannel channel;
+	private final %service%ServiceGrpc.%service%ServiceBlockingStub blockingStub;
+
+	public %service%Client(String host, int port) {
+		channel = ManagedChannelBuilder.forAddress(host, port)
+			.usePlaintext(true)
+			.build();
+			
+    	blockingStub = %service%ServiceGrpc.newBlockingStub(channel);
+	}
+	
+	public %service%Client(ManagedChannel channel) {
+		this.channel = channel;		
+    	blockingStub = %service%ServiceGrpc.newBlockingStub(this.channel);
+	}
+
+	public void shutdown() throws InterruptedException {
+		channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+	}
+
+	public void create(%parameters_list%) {
+		try {
+			logger.info("Calling create...");
+      
+			%resource% %resource_lower_case% = %resource%.newBuilder().%set_parameters%.build();
+			Create%resource%Request request = Create%resource%Request.newBuilder().set%resource%(%resource_lower_case%).build();
+			blockingStub.create%resource%(request);
+      
+			logger.info("Called create...");
+		} catch (RuntimeException e) {
+			logger.log(Level.WARNING, "RPC failed", e);
+			return;
+		}
+	}
+
+	public void update(%parameters_list%) {
+		try {
+			logger.info("Calling update...");
+      
+			%resource% %resource_lower_case% = %resource%.newBuilder().%set_parameters%.build();
+			Update%resource%Request request = Update%resource%Request.newBuilder().set%resource%(%resource_lower_case%).build();
+			blockingStub.update%resource%(request);
+      
+			logger.info("Called update...");
+		} catch (RuntimeException e) {
+			logger.log(Level.WARNING, "RPC failed", e);
+			return;
+		}
+	}
+
+	public void delete(%get_identifier_type% %identifier_lower_case%) {
+		try {
+			logger.info("Calling delete...");
+      
+			Delete%resource%Request request = Delete%resource%Request.newBuilder().%set_identifier%(%identifier_lower_case%).build();
+			blockingStub.delete%resource%(request);
+      
+			logger.info("Called delete...");
+		} catch (RuntimeException e) {
+			logger.log(Level.WARNING, "RPC failed", e);
+			return;
+		}
+	}
+
+	public %resource% get(%get_identifier_type% %identifier_lower_case%) {
+		%resource% %resource_lower_case% = null;
+		try {
+			logger.info("Calling get...");
+      
+			Get%resource%Request request = Get%resource%Request.newBuilder().%set_identifier%(%identifier_lower_case%).build();
+			%resource_lower_case% = blockingStub.get%resource%(request);
+      
+			logger.info("Called get...");
+		} catch (RuntimeException e) {
+			logger.log(Level.WARNING, "RPC failed", e);
+		}
+		
+		return %resource_lower_case%;
+	}
+
+	public List<%resource%> list() {
+		List<%resource%> %resource_lower_case%s = null;
+		try {
+			logger.info("Calling list...");
+      
+			List%resource%sRequest request = List%resource%sRequest.newBuilder().setPageSize(10).setPageToken("").build();
+			List%resource%sResponse response = blockingStub.list%resource%s(request);
+			%resource_lower_case%s = response.get%resource%sList();
+      
+			logger.info("Called list...");
+		} catch (RuntimeException e) {
+			logger.log(Level.WARNING, "RPC failed", e);
+		}
+		
+		return %resource_lower_case%s;
+	}
+
+	public static void main(String[] args) throws Exception {
+		%service%Client client = new %service%Client("localhost", 50051);
+		try {
+			// ADD CODE
+		} finally {
+			client.shutdown();
+		}
+	}
+}

@@ -1,0 +1,115 @@
+package com.google.example;
+
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
+import io.grpc.stub.StreamObserver;
+
+import java.util.logging.Logger;
+import java.util.HashMap;
+import java.util.Map;
+
+public class %service%Server {
+
+	private static final Logger logger = Logger.getLogger(%service%Server.class.getName());
+
+  	private int port = 50051;
+  	private Server server;
+
+	private void start() throws Exception {
+		server = ServerBuilder.forPort(port)
+			.addService(%service%ServiceGrpc.bindService(new %service%ServiceImpl()))
+			.build()
+			.start();
+		
+		logger.info("Server started, listening on " + port);
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				// Use stderr here since the logger may have been reset by its JVM shutdown hook.
+				System.err.println("*** shutting down gRPC server since JVM is shutting down");
+				%service%Server.this.stop();
+				System.err.println("*** server shut down");
+			}
+		});
+	}
+
+	private void stop() {
+		if (server != null) {
+			server.shutdown();
+		}
+	}
+	
+	private void blockUntilShutdown() throws InterruptedException {
+		if (server != null) {
+			server.awaitTermination();
+		}
+	}
+	
+	public static void main(String[] args) throws Exception {
+		final %service%Server server = new %service%Server();
+		server.start();
+		server.blockUntilShutdown();
+	}
+	
+	private class %service%ServiceImpl implements %service%ServiceGrpc.%service%Service {
+
+		private Map<Integer, %resource%> cache = new HashMap<Integer, %resource%>();
+
+		@Override
+		public void create%resource%(Create%resource%Request request, StreamObserver<%resource%> responseObserver) {
+			%resource% %resource_lower_case% = request.get%resource%();
+      
+			cache.put(%resource_lower_case%.%get_identifier%(), %resource_lower_case%);
+			logger.info("Created the %resource_lower_case%");
+
+			responseObserver.onNext(%resource_lower_case%);
+			responseObserver.onCompleted();
+		}
+
+		@Override
+		public void update%resource%(Update%resource%Request request, StreamObserver<%resource%> responseObserver) {
+			%resource% %resource_lower_case% = request.get%resource%();
+      
+			cache.replace(%resource_lower_case%.%get_identifier%(), %resource_lower_case%);
+			logger.info("Updated the %resource_lower_case%");
+
+			responseObserver.onNext(%resource_lower_case%);
+			responseObserver.onCompleted();
+		}
+
+		@Override
+		public void delete%resource%(Delete%resource%Request request, StreamObserver<%resource%> responseObserver) {
+			%get_identifier_type% %identifier_lower_case% = request.%get_identifier%();
+
+			%resource% %resource_lower_case% = cache.remove(%identifier_lower_case%);
+			logger.info("Deleted the %resource_lower_case%");
+
+			responseObserver.onNext(%resource_lower_case%);
+			responseObserver.onCompleted();
+		}
+   
+		@Override
+		public void get%resource%(Get%resource%Request request, StreamObserver<%resource%> responseObserver) {
+			%get_identifier_type% %identifier_lower_case% = request.%get_identifier%();
+
+			%resource% %resource_lower_case% = cache.get(%identifier_lower_case%);
+			logger.info("Got the %resource_lower_case%");
+
+			responseObserver.onNext(%resource_lower_case%);
+			responseObserver.onCompleted();
+		}
+
+		@Override
+		public void list%resource%s(List%resource%sRequest request, StreamObserver<List%resource%sResponse> responseObserver) {
+			List%resource%sResponse.Builder builder = List%resource%sResponse.newBuilder();
+      
+			for (%resource% %resource_lower_case% : cache.values()) {
+				builder.add%resource%s(%resource_lower_case%);    
+			}
+			logger.info("Returning all the %resource_lower_case%s ");
+
+			responseObserver.onNext(builder.build());
+			responseObserver.onCompleted();
+		}
+	}
+}

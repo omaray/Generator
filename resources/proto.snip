@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package google.example;
+
+option java_multiple_files = true;
+option java_package = "com.google.example";
+
+service %service%Service {
+	rpc Create%resource%(Create%resource%Request) returns (%resource%) {}
+	rpc Update%resource%(Update%resource%Request) returns (%resource%) {}
+	rpc Delete%resource%(Delete%resource%Request) returns (%resource%) {}
+	rpc Get%resource%(Get%resource%Request) returns (%resource%) {}
+	rpc List%resource%s(List%resource%sRequest) returns (List%resource%sResponse) {}
+}
+
+message %resource% {
+	%s
+}
+
+message Create%resource%Request {
+	%resource% %resource_lower_case% = 1;
+}
+
+message Update%resource%Request {
+	%resource% %resource_lower_case% = 1;
+}
+
+message Delete%resource%Request {
+	%s = 1;
+}
+
+message Get%resource%Request {
+	%s = 1;
+}
+
+message List%resource%sRequest {
+	int32 page_size = 1;
+	string page_token = 2;
+}
+
+message List%resource%sResponse {
+	repeated %resource% %resource_lower_case%s = 1;
+	string next_page_token = 2;
+}
