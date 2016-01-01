@@ -3,17 +3,22 @@ package com.generation;
 public class Constants {
     
     // Tools
-    public static final String PROTOC_PATH = "/usr/local/bin/protoc";
-    public static final String JAVAC_PATH = "javac";
+    public static final String SHELL = "sh";
     public static final String JAVA_PATH = "java";
+    public static final String JAVAC_PATH = "javac";
+    public static final String PROTOC_PATH = "/usr/local/bin/protoc";
+    public static final String DOCKER = "/usr/local/bin/docker";
+    public static final String DOCKER_MACHINE = "/usr/local/bin/docker-machine";
     
     // Common
+    public static final String PATH_ENV = "PATH";
     public static final String LIB_PATH = "./lib";
     public static final String PACKAGE = "com.google.example.";
     public final static String PROTO_FILE_PATH = "./out/proto/";
     public static final String GENERATED_PATH = "./out/generated";
     public static final String GENERATED_FILES_PATH = "./out/generated/com/google/example";
     public static final String MAIN_FILES_PATH = "./out/main/com/google/example/";
+    public static final String PATH_ENV_VALUE = "/Users/omaray/Development/google-cloud-sdk/bin:/usr/local/git/current/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/X11/bin:/Users/omaray/Development/apache-maven-3.3.3/bin";
     
     // Used mainly by ProtoGenerator
     public final static String PROTO_SNIP = "./resources/proto.snip";
@@ -52,4 +57,7 @@ public class Constants {
     public static final String CLIENT_CLASS_FILE_EXTENSION = "Client";
     public static final String HOST = "localhost";
     public static final int PORT = 50051;
+
+    // Used mainly by the DockerImageGenerator
+    public static final String DOCKER_SCRIPT = "./resources/docker_script";
 }

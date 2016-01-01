@@ -167,6 +167,11 @@ public class Util {
         System.out.println(command.toString());
         
         ProcessBuilder pb = new ProcessBuilder(command);
+        Map<String,String> env = pb.environment();
+        String currentPath = env.get(Constants.PATH_ENV);
+        String updatedPath = currentPath + ":" + Constants.PATH_ENV_VALUE;
+        env.put(Constants.PATH_ENV, updatedPath);
+
         Process process = null;
         try {
             process = pb.start();
@@ -174,6 +179,7 @@ public class Util {
             outputHandler.start();
             
             if (wait) {
+                Thread.sleep(1000);
                 int exitValue = process.waitFor();
                 System.out.println("Exit value is: " + exitValue);
                 logger.info(outputHandler.getOutput());

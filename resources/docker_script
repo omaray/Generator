@@ -1,0 +1,4 @@
+/usr/local/bin/docker-machine start default
+eval $(/usr/local/bin/docker-machine env default)
+/usr/local/bin/docker rmi -f grpc/server
+/usr/local/bin/docker build -f ./resources/Dockerfile -t grpc/server .
