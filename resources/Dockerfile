@@ -10,3 +10,5 @@ RUN mkdir generator/out/bin/server
 COPY exe/* /generator/exe/
 COPY lib/* /generator/lib/
 COPY out/bin/server* /generator/out/bin/server/
+
+CMD java -cp ".:./generator/lib/*:./generator/out/bin/server" com.google.example.AddressBookServer
