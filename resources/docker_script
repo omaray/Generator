@@ -1,5 +1,5 @@
 /usr/local/bin/docker-machine start default
 eval $(/usr/local/bin/docker-machine env default)
 /usr/local/bin/docker rmi -f grpc/server3
-/usr/local/bin/docker build -f ./resources/Dockerfile -t grpc/server3 .
+/usr/local/bin/docker build -f ./out/main/Dockerfile -t grpc/server3 .
 docker run -d -p 50051:50051 grpc/server3

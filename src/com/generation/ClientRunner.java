@@ -10,18 +10,20 @@ import java.util.List;
 
 public class ClientRunner implements Executor {    
     private String serviceName;
+    private String serviceAddress;
     private String clientClassName;
     private List<Pair<String,String>> parameters;
     private URLClassLoader classLoader;
     private Class<?> clientClass;
     private Object clientInstance;
     
-    public ClientRunner(String serviceName, List<Pair<String,String>> parameters) {
+    public ClientRunner(String serviceName, String serviceAddress, List<Pair<String,String>> parameters) {
         this.serviceName = serviceName;
+        this.serviceAddress = serviceAddress;
         this.clientClassName = Constants.PACKAGE + this.serviceName + Constants.CLIENT_CLASS_FILE_EXTENSION;
         this.parameters = Util.convertToJava(parameters);
     }
-    
+
     public void execute() {
         try {
             File classFile = new File(Constants.CLIENT_OUT_DIR);
@@ -35,7 +37,7 @@ public class ClientRunner implements Executor {
             this.classLoader = new URLClassLoader(urlsArray);
             this.clientClass = classLoader.loadClass(this.clientClassName);
             Constructor<?> ctor = clientClass.getConstructor(String.class, int.class);
-            this.clientInstance = ctor.newInstance("localhost", Constants.PORT);
+            this.clientInstance = ctor.newInstance(this.serviceAddress, Constants.PORT);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -130,7 +132,7 @@ public class ClientRunner implements Executor {
         parameters.add(new Pair<String,String>("name", "string"));
         parameters.add(new Pair<String,String>("email", "string"));
         
-        ClientRunner clientRunner = new ClientRunner("AddressBook", parameters);
+        ClientRunner clientRunner = new ClientRunner("AddressBook", "localhost", parameters);
         clientRunner.execute();
         
         // CREATE

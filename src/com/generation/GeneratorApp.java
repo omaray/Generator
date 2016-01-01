@@ -50,7 +50,7 @@ public class GeneratorApp {
         ClientCompiler clientCompiler = new ClientCompiler(serviceName);
         clientCompiler.execute();
         
-        ClientRunner clientRunner = new ClientRunner(serviceName, parameters);
+        ClientRunner clientRunner = new ClientRunner(serviceName, "localhost", parameters);
         clientRunner.execute();
         
         ArrayList<Object> argCreate1 = new ArrayList<Object>();
@@ -78,5 +78,28 @@ public class GeneratorApp {
         
         clientRunner.shutdown();
         serverRunner.shutdown();
+
+        // Create the Dockerfile and run a container
+        DockerFileGenerator dockerFileGenerator = new DockerFileGenerator(serviceName);
+        dockerFileGenerator.generate();
+        DockerContainerRunner dockerContainerRunner = new DockerContainerRunner();
+        dockerContainerRunner.execute();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        // Update the client's endpoint and create a Person
+        ClientRunner clientRunnerDocker = new ClientRunner(serviceName, "192.168.99.100", parameters);
+        clientRunnerDocker.execute();
+        ArrayList<Object> argCreateDocker = new ArrayList<Object>();
+        argCreateDocker.add(new Integer(9));
+        argCreateDocker.add(new String("riwa"));
+        argCreateDocker.add(new String("riwa@hotmail.com"));
+        clientRunnerDocker.create(argCreateDocker);
+        clientRunnerDocker.shutdown();
     }
 }

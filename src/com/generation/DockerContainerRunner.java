@@ -2,13 +2,9 @@ package com.generation;
 
 import java.util.ArrayList;
 
-public class DockerImageGenerator implements Generator {
+public class DockerContainerRunner implements Executor {
     
-    public void clear() {
-        
-    }
-    
-    public void generate() {
+    public void execute() {
         executeScript();
     }
     
@@ -22,7 +18,7 @@ public class DockerImageGenerator implements Generator {
     }
 
     public static void main(String[] args) {
-        DockerImageGenerator dockerImageGenerator = new DockerImageGenerator();
-        dockerImageGenerator.generate();
+        DockerContainerRunner dockerContainerRunning = new DockerContainerRunner();
+        dockerContainerRunning.execute();
     }
 }

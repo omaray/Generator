@@ -58,6 +58,8 @@ public class Constants {
     public static final String HOST = "localhost";
     public static final int PORT = 50051;
 
-    // Used mainly by the DockerImageGenerator
+    // Used mainly by DockerFileGenerator and DockerContainerRunner
     public static final String DOCKER_SCRIPT = "./resources/docker_script";
+    public static final String DOCKERFILE_SNIP = "./resources/dockerfile.snip";
+    public static final String DOCKERFILE_PATH = "./out/main/Dockerfile";
 }
