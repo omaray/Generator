@@ -138,6 +138,10 @@ public class ServiceTrialController extends AnchorPane implements Initializable 
         }
     }
     
+    public void processStop(ActionEvent event) {
+        this.serverRunner.shutdown();
+    }
+    
     public void processViewClient(ActionEvent event) {
         application.navigateToServiceFile(
                 this.serviceName, 
