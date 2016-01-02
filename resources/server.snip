@@ -53,7 +53,7 @@ public class %service%Server {
 	
 	private class %service%ServiceImpl implements %service%ServiceGrpc.%service%Service {
 
-		private Map<Integer, %resource%> cache = new HashMap<Integer, %resource%>();
+		private Map<%get_identifier_type_class%, %resource%> cache = new HashMap<%get_identifier_type_class%, %resource%>();
 
 		@Override
 		public void create%resource%(Create%resource%Request request, StreamObserver<%resource%> responseObserver) {

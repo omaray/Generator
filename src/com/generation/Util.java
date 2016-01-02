@@ -30,6 +30,7 @@ public class Util {
     public final static Map<String,String> protoToJava;
     public final static Map<String,String> javaToProto;
     public final static Map<String,Class<?>> javaToClass;
+    public final static Map<String,String> javaTypeClass;
     static
     {
         userToProto = new HashMap<String,String>();
@@ -61,6 +62,12 @@ public class Util {
         javaToClass.put("String", String.class);
         javaToClass.put("boolean", boolean.class);
         javaToClass.put("double", double.class);
+        
+        javaTypeClass = new HashMap<String,String>();
+        javaTypeClass.put("int", "Integer");
+        javaTypeClass.put("String", "String");
+        javaTypeClass.put("boolean", "Boolean");
+        javaTypeClass.put("double", "Double");
     }
     
     // Convert each parameter's type to a proto type

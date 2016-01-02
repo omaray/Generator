@@ -11,28 +11,28 @@
       <Button layoutX="585.0" layoutY="661.0" mnemonicParsing="false" text="View Server" />
       <Button layoutX="355.0" layoutY="661.0" mnemonicParsing="false" text="Deploy" />
       <Button layoutX="133.0" layoutY="239.0" mnemonicParsing="false" text="Create" />
-      <Label layoutX="52.0" layoutY="68.0" text="cre" />
+      <Label fx:id="createId" layoutX="31.0" layoutY="68.0" prefHeight="16.0" prefWidth="47.0" text="cre" textAlignment="RIGHT" />
       <TextField layoutX="80.0" layoutY="63.0" />
       <TextArea layoutX="81.0" layoutY="103.0" prefHeight="122.0" prefWidth="163.0" />
-      <Label layoutX="35.0" layoutY="103.0" text="Fileds" />
+      <Label layoutX="35.0" layoutY="103.0" text="Fields" />
       <TextField layoutX="308.0" layoutY="63.0" />
-      <Label layoutX="280.0" layoutY="68.0" text="del" />
+      <Label fx:id="deleteId" layoutX="262.0" layoutY="68.0" prefHeight="16.0" prefWidth="40.0" text="del" textAlignment="RIGHT" />
       <Button layoutX="362.0" layoutY="151.0" mnemonicParsing="false" text="Delete" />
-      <Label layoutX="499.0" layoutY="103.0" text="Fileds" />
+      <Label layoutX="499.0" layoutY="103.0" text="Fields" />
       <TextArea layoutX="545.0" layoutY="103.0" prefHeight="122.0" prefWidth="163.0" />
       <TextField layoutX="545.0" layoutY="63.0" />
-      <Label layoutX="517.0" layoutY="68.0" text="up" />
+      <Label fx:id="updateId" layoutX="493.0" layoutY="68.0" prefHeight="16.0" prefWidth="47.0" text="up" textAlignment="RIGHT" />
       <Button layoutX="597.0" layoutY="239.0" mnemonicParsing="false" text="Update" />
       <TextField layoutX="161.0" layoutY="331.0" />
-      <Label layoutX="133.0" layoutY="336.0" text="get" />
+      <Label fx:id="getId" layoutX="108.0" layoutY="336.0" prefHeight="16.0" prefWidth="47.0" text="get" textAlignment="RIGHT" />
       <Button layoutX="223.0" layoutY="374.0" mnemonicParsing="false" text="Get" />
       <TextArea layoutX="163.0" layoutY="411.0" prefHeight="179.0" prefWidth="163.0" />
       <Label layoutX="118.0" layoutY="411.0" text="Result" />
       <Label layoutX="413.0" layoutY="406.0" text="Result" />
       <TextArea layoutX="458.0" layoutY="406.0" prefHeight="179.0" prefWidth="163.0" />
       <Button layoutX="518.0" layoutY="369.0" mnemonicParsing="false" text="List" />
-      <Label layoutX="416.0" layoutY="331.0" text="Page" />
+      <Label layoutX="411.0" layoutY="331.0" text="Page" textAlignment="RIGHT" />
       <TextField layoutX="456.0" layoutY="326.0" />
-      <Button onAction="#processReturnToDefinition" layoutX="16.0" layoutY="14.0" mnemonicParsing="false" text="&lt; Back" />
+      <Button layoutX="16.0" layoutY="14.0" mnemonicParsing="false" onAction="#processReturnToDefinition" text="&lt; Back" />
    </children>
 </AnchorPane>

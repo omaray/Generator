@@ -41,7 +41,7 @@ public class GeneratorApp extends Application {
     }
     
     public void navigateToServiceTrial(String serviceName, String resourceName, List<Pair<String,String>> parameters) {
-        gotoServiceTrial();
+        gotoServiceTrial(serviceName, resourceName, parameters);
     }
     
     public void navigateToServiceFile(String serviceName, String resourceName, List<Pair<String,String>> parameters) {
@@ -67,7 +67,7 @@ public class GeneratorApp extends Application {
         }
     }
     
-    private void gotoServiceTrial() {
+    private void gotoServiceTrial(String serviceName, String resourceName, List<Pair<String,String>> parameters) {
         try {
             if (GeneratorApp.trialController == null) {
                 GeneratorApp.trialController = 
@@ -76,6 +76,11 @@ public class GeneratorApp extends Application {
             } else {
                 updateRoot(GeneratorApp.trialPane);
             }
+            
+            GeneratorApp.trialController.setServiceName(serviceName);
+            GeneratorApp.trialController.setResourceName(resourceName);
+            GeneratorApp.trialController.setParameters(parameters);
+            GeneratorApp.trialController.setup();
         } catch (Exception ex) {
             Logger.getLogger(GeneratorApp.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -91,10 +96,10 @@ public class GeneratorApp extends Application {
                 updateRoot(GeneratorApp.filePane);
             }
             
-            fileController.setServiceName(serviceName);
-            fileController.setResourceName(resourceName);
-            fileController.setParameters(parameters);
-            fileController.loadProtoFile();
+            GeneratorApp.fileController.setServiceName(serviceName);
+            GeneratorApp.fileController.setResourceName(resourceName);
+            GeneratorApp.fileController.setParameters(parameters);
+            GeneratorApp.fileController.loadProtoFile();
         } catch (Exception ex) {
             Logger.getLogger(GeneratorApp.class.getName()).log(Level.SEVERE, null, ex);
         }

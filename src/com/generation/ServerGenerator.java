@@ -28,7 +28,8 @@ public class ServerGenerator implements Generator {
         tokens.put("resource", this.resourceName);
         tokens.put("resource_lower_case", this.resourceName.toLowerCase());
         tokens.put("get_identifier", "get" + Util.lowerUnderscoreToUpperCamel(this.parameters.get(0).getLeft().toLowerCase()));
-        tokens.put("get_identifier_type", this.parameters.get(0).getRight().toLowerCase());
+        tokens.put("get_identifier_type", this.parameters.get(0).getRight());
+        tokens.put("get_identifier_type_class", Util.javaTypeClass.get(this.parameters.get(0).getRight()));
         tokens.put("identifier_lower_case", this.parameters.get(0).getLeft().toLowerCase());
         
         String serverSnippetExpanded = Util.expandTemplate(serverSnippet, tokens);
