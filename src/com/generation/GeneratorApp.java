@@ -82,7 +82,7 @@ public class GeneratorApp extends Application {
         }
     }
     
-    private Initializable replaceSceneContent(String fxml, boolean isDefinition) throws Exception {
+    private Initializable replaceSceneContent(String fxml, boolean isServiceDefinition) throws Exception {
         FXMLLoader loader = new FXMLLoader();
         InputStream in = GeneratorApp.class.getResourceAsStream(fxml);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
@@ -94,7 +94,7 @@ public class GeneratorApp extends Application {
             in.close();
         }
         
-        if (isDefinition) {
+        if (isServiceDefinition) {
             this.definitionPane = page;
         }
         
