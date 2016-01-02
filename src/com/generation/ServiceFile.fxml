@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="750.0" styleClass="background" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.generation.ServiceProtoController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="750.0" styleClass="background" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.generation.ServiceFileController">
    <children>
       <Button id="button1" layoutX="284.0" layoutY="710.0" mnemonicParsing="false" onAction="#processReturnToDefinition" text="&lt; Back to Service Definition" />
       <TextArea fx:id="textArea" layoutX="18.0" layoutY="67.0" prefHeight="632.0" prefWidth="713.0" />

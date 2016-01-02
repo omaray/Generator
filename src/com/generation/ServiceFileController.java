@@ -10,7 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 
-public class ServiceProtoController extends AnchorPane implements Initializable {
+public class ServiceFileController extends AnchorPane implements Initializable {
     
     private GeneratorApp application;
     private String serviceName;
@@ -43,7 +43,9 @@ public class ServiceProtoController extends AnchorPane implements Initializable 
         ProtoGenerator protoGenerator = new ProtoGenerator(this.serviceName, this.resourceName, this.parameters);
         protoGenerator.generate();
 
-        String protoContent = Util.readFromFile(Constants.PROTO_FILE_PATH + this.serviceName + Constants.PROTO_EXTENSION);
+        String protoContent = Util.readFromFile(
+                Constants.PROTO_FILE_PATH + Util.upperCamelToLowerUnderscore(serviceName) + Constants.PROTO_EXTENSION);
+        
         textArea.setText(protoContent);
     }
     

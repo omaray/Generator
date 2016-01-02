@@ -21,7 +21,9 @@ public class ServiceDefinitionController extends AnchorPane implements Initializ
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // TODO Auto-generated method stub
+        serviceName.setText("AddressBook");
+        resourceName.setText("Person");
+        resourceDefinition.setText("name: string");
     }
 
     public void setApp(GeneratorApp application){
@@ -29,7 +31,14 @@ public class ServiceDefinitionController extends AnchorPane implements Initializ
     }
     
     public void processViewDefinition(ActionEvent event) {
-        application.navigateToServiceProto(
+        application.navigateToServiceFile(
+                this.serviceName.getText(), 
+                this.resourceName.getText(), 
+                getParameters(this.resourceDefinition.getText()));
+    }
+    
+    public void processTestService(ActionEvent event) {
+        application.navigateToServiceTrial(
                 this.serviceName.getText(), 
                 this.resourceName.getText(), 
                 getParameters(this.resourceDefinition.getText()));
