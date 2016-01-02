@@ -25,9 +25,13 @@ public class GeneratorApp extends Application {
     public static AnchorPane trialPane;
     public static AnchorPane filePane;
     
-    private enum PageType {
+    public enum PageType {
         Definition, Trial, File
     };
+    
+    public enum FileType {
+        Proto, Client, Server
+    }
     
     @Override 
     public void start(Stage primaryStage) throws Exception {
@@ -41,11 +45,16 @@ public class GeneratorApp extends Application {
     }
     
     public void navigateToServiceTrial(String serviceName, String resourceName, List<Pair<String,String>> parameters) {
-        gotoServiceTrial(serviceName, resourceName, parameters);
+        gotoServiceTrial(serviceName, resourceName, parameters, true);
     }
     
-    public void navigateToServiceFile(String serviceName, String resourceName, List<Pair<String,String>> parameters) {
-        gotoServiceFile(serviceName, resourceName, parameters);
+    public void navigateToServiceTrialNoGeneration() {
+        gotoServiceTrial(null, null, null, false);
+    }
+    
+    public void navigateToServiceFile(
+            String serviceName, String resourceName, List<Pair<String,String>> parameters, FileType fileType) {
+        gotoServiceFile(serviceName, resourceName, parameters, fileType);
     }
     
     private Parent createInitialContent() {
@@ -67,7 +76,8 @@ public class GeneratorApp extends Application {
         }
     }
     
-    private void gotoServiceTrial(String serviceName, String resourceName, List<Pair<String,String>> parameters) {
+    private void gotoServiceTrial(
+            String serviceName, String resourceName, List<Pair<String,String>> parameters, boolean generate) {
         try {
             if (GeneratorApp.trialController == null) {
                 GeneratorApp.trialController = 
@@ -77,16 +87,20 @@ public class GeneratorApp extends Application {
                 updateRoot(GeneratorApp.trialPane);
             }
             
-            GeneratorApp.trialController.setServiceName(serviceName);
-            GeneratorApp.trialController.setResourceName(resourceName);
-            GeneratorApp.trialController.setParameters(parameters);
-            GeneratorApp.trialController.setup();
+            if (generate) {
+                GeneratorApp.trialController.setServiceName(serviceName);
+                GeneratorApp.trialController.setResourceName(resourceName);
+                GeneratorApp.trialController.setParameters(parameters);
+                GeneratorApp.trialController.setup();
+            }
+            
         } catch (Exception ex) {
             Logger.getLogger(GeneratorApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    private void gotoServiceFile(String serviceName, String resourceName, List<Pair<String,String>> parameters) {
+    private void gotoServiceFile(
+            String serviceName, String resourceName, List<Pair<String,String>> parameters, FileType fileType) {
         try {
             if (GeneratorApp.fileController == null) {
                 GeneratorApp.fileController = 
@@ -99,7 +113,16 @@ public class GeneratorApp extends Application {
             GeneratorApp.fileController.setServiceName(serviceName);
             GeneratorApp.fileController.setResourceName(resourceName);
             GeneratorApp.fileController.setParameters(parameters);
-            GeneratorApp.fileController.loadProtoFile();
+            GeneratorApp.fileController.setFileType(fileType);
+            
+            if (fileType == FileType.Proto) {
+                GeneratorApp.fileController.loadProtoFile();
+            } else if (fileType == FileType.Client) {
+                GeneratorApp.fileController.loadClientFile();
+            } else if (fileType == FileType.Server) {
+                GeneratorApp.fileController.loadServerFile();
+            }
+            
         } catch (Exception ex) {
             Logger.getLogger(GeneratorApp.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -119,13 +142,9 @@ public class GeneratorApp extends Application {
         
         if (pageType == PageType.Definition) {
             GeneratorApp.definitionPane = page;
-        }
-        
-        if (pageType == PageType.Trial) {
+        } else if (pageType == PageType.Trial) {
             GeneratorApp.trialPane = page;
-        }
-        
-        if (pageType == PageType.File) {
+        }else if (pageType == PageType.File) {
             GeneratorApp.filePane = page;
         }
         

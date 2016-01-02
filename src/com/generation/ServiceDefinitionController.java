@@ -34,7 +34,8 @@ public class ServiceDefinitionController extends AnchorPane implements Initializ
         application.navigateToServiceFile(
                 this.serviceName.getText(), 
                 this.resourceName.getText(), 
-                getParameters(this.resourceDefinition.getText()));
+                getParameters(this.resourceDefinition.getText()),
+                GeneratorApp.FileType.Proto);
     }
     
     public void processTestService(ActionEvent event) {

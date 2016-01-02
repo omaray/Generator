@@ -16,6 +16,7 @@ public class ServiceFileController extends AnchorPane implements Initializable {
     private String serviceName;
     private String resourceName;
     private List<Pair<String,String>> parameters;
+    private GeneratorApp.FileType fileType;
     
     @FXML TextArea textArea;
 
@@ -39,6 +40,10 @@ public class ServiceFileController extends AnchorPane implements Initializable {
         this.parameters = parameters;
     }
     
+    public void setFileType(GeneratorApp.FileType fileType) {
+        this.fileType = fileType;
+    }
+    
     public void loadProtoFile() {
         ProtoGenerator protoGenerator = new ProtoGenerator(this.serviceName, this.resourceName, this.parameters);
         protoGenerator.generate();
@@ -49,7 +54,25 @@ public class ServiceFileController extends AnchorPane implements Initializable {
         textArea.setText(protoContent);
     }
     
-    public void processReturnToDefinition(ActionEvent event) {
-        application.navigateToServiceDefinition();
+    public void loadClientFile() {
+        String clientContent = Util.readFromFile(
+                Constants.CLIENT_FILE_PATH + this.serviceName + Constants.CLIENT_FILE_EXTENSION);
+        
+        textArea.setText(clientContent);
+    }
+    
+    public void loadServerFile() {
+        String serverContent = Util.readFromFile(
+                Constants.SERVER_FILE_PATH + this.serviceName + Constants.SERVER_FILE_EXTENSION);
+        
+        textArea.setText(serverContent);
+    }
+    
+    public void processReturnBack(ActionEvent event) {
+        if (this.fileType == GeneratorApp.FileType.Proto) {
+            application.navigateToServiceDefinition();
+        } else {
+            application.navigateToServiceTrialNoGeneration();
+        }
     }
 }

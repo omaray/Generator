@@ -7,8 +7,8 @@
 
 <AnchorPane prefHeight="750.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.generation.ServiceTrialController">
    <children>
-      <Button layoutX="116.0" layoutY="661.0" mnemonicParsing="false" text="View Client" />
-      <Button layoutX="585.0" layoutY="661.0" mnemonicParsing="false" text="View Server" />
+      <Button onAction="#processViewClient" layoutX="116.0" layoutY="661.0" mnemonicParsing="false" text="View Client" />
+      <Button onAction="#processViewServer" layoutX="585.0" layoutY="661.0" mnemonicParsing="false" text="View Server" />
       <Button layoutX="355.0" layoutY="661.0" mnemonicParsing="false" text="Deploy" />
       <Button layoutX="133.0" layoutY="239.0" mnemonicParsing="false" text="Create" />
       <Label fx:id="createId" layoutX="31.0" layoutY="68.0" prefHeight="16.0" prefWidth="47.0" text="cre" textAlignment="RIGHT" />

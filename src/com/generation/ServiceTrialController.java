@@ -85,6 +85,22 @@ public class ServiceTrialController extends AnchorPane implements Initializable 
         getId.setText(Util.lowerCamelToUpperCamel(parameters.get(0).getLeft()));
     }
     
+    public void processViewClient(ActionEvent event) {
+        application.navigateToServiceFile(
+                this.serviceName, 
+                this.resourceName, 
+                this.parameters,
+                GeneratorApp.FileType.Client);
+    }
+    
+    public void processViewServer(ActionEvent event) {
+        application.navigateToServiceFile(
+                this.serviceName, 
+                this.resourceName, 
+                this.parameters,
+                GeneratorApp.FileType.Server);
+    }
+    
     public void processReturnToDefinition(ActionEvent event) {
         this.serverRunner.shutdown();
         application.navigateToServiceDefinition();
