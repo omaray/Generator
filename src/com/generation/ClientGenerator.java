@@ -28,7 +28,7 @@ public class ClientGenerator implements Generator {
         tokens.put("resource", this.resourceName);
         tokens.put("resource_lower_case", this.resourceName.toLowerCase());        
         tokens.put("set_identifier", "set" + Util.lowerUnderscoreToUpperCamel(this.parameters.get(0).getLeft().toLowerCase()));
-        tokens.put("get_identifier_type", this.parameters.get(0).getRight().toLowerCase());
+        tokens.put("get_identifier_type", this.parameters.get(0).getRight());
         tokens.put("identifier_lower_case", this.parameters.get(0).getLeft().toLowerCase());
         tokens.put("parameters_list", getParametersList());
         tokens.put("set_parameters", getSetParameters());

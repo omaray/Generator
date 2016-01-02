@@ -94,13 +94,7 @@ public class ServiceTrialController extends AnchorPane implements Initializable 
         this.serverRunner = new ServerRunner(serviceName);
         this.serverRunner.execute();
         
-        createId.setText(parameters.get(0).getLeft());
-        deleteId.setText(parameters.get(0).getLeft());
-        updateId.setText(parameters.get(0).getLeft());
-        getId.setText(parameters.get(0).getLeft());
-        
-        initializeFields(this.createFields);
-        initializeFields(this.updateFields);
+        initializeTextInputs();
     }
     
     public void processCreate(ActionEvent event) {
@@ -163,6 +157,23 @@ public class ServiceTrialController extends AnchorPane implements Initializable 
     public void processReturnToDefinition(ActionEvent event) {
         this.serverRunner.shutdown();
         application.navigateToServiceDefinition();
+    }
+    
+    private void initializeTextInputs() {
+        createId.setText(parameters.get(0).getLeft());
+        deleteId.setText(parameters.get(0).getLeft());
+        updateId.setText(parameters.get(0).getLeft());
+        getId.setText(parameters.get(0).getLeft());
+        
+        this.createIdValue.setText("");
+        this.updateIdValue.setText("");
+        this.deleteIdValue.setText("");
+        this.getIdValue.setText("");
+        
+        this.getResult.setText("");
+        this.listResult.setText("");
+        initializeFields(this.createFields);
+        initializeFields(this.updateFields);
     }
     
     private void initializeFields(TextArea textArea) {

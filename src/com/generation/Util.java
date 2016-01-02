@@ -257,7 +257,7 @@ public class Util {
         } else if (type.equals("bool")) {
             return Boolean.parseBoolean(value);
         } else if (type.equals("double")) {
-            return Double.parseDouble("value");
+            return Double.parseDouble(value);
         }
         
         return null;
