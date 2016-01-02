@@ -17,6 +17,8 @@ import javafx.stage.Stage;
 
 public class GeneratorApp extends Application {
     private Group root = new Group();
+    private ServiceDefinitionController definitionController;
+    private AnchorPane definitionPane;
     
     @Override 
     public void start(Stage primaryStage) throws Exception {
@@ -44,9 +46,13 @@ public class GeneratorApp extends Application {
     
     private void gotoServiceDefinition() {
         try {
-            ServiceDefinitionController definition = 
-                    (ServiceDefinitionController) replaceSceneContent("ServiceDefinition.fxml");
-            definition.setApp(this);
+            if (this.definitionController == null) {
+                this.definitionController = 
+                        (ServiceDefinitionController) replaceSceneContent("ServiceDefinition.fxml", true);
+                this.definitionController.setApp(this);
+            } else {
+                updateRoot(this.definitionPane);
+            }
         } catch (Exception ex) {
             Logger.getLogger(GeneratorApp.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -55,7 +61,7 @@ public class GeneratorApp extends Application {
     private void gotoServiceTrial() {
         try {
             ServiceTrialController trial = 
-                    (ServiceTrialController) replaceSceneContent("ServiceTrial.fxml");
+                    (ServiceTrialController) replaceSceneContent("ServiceTrial.fxml", false);
             trial.setApp(this);
         } catch (Exception ex) {
             Logger.getLogger(GeneratorApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -65,7 +71,7 @@ public class GeneratorApp extends Application {
     private void gotoServiceProto(String serviceName, String resourceName, List<Pair<String,String>> parameters) {
         try {
             ServiceProtoController proto = 
-                    (ServiceProtoController) replaceSceneContent("ServiceProto.fxml");
+                    (ServiceProtoController) replaceSceneContent("ServiceProto.fxml", false);
             proto.setApp(this);
             proto.setServiceName(serviceName);
             proto.setResourceName(resourceName);
@@ -76,7 +82,7 @@ public class GeneratorApp extends Application {
         }
     }
     
-    private Initializable replaceSceneContent(String fxml) throws Exception {
+    private Initializable replaceSceneContent(String fxml, boolean isDefinition) throws Exception {
         FXMLLoader loader = new FXMLLoader();
         InputStream in = GeneratorApp.class.getResourceAsStream(fxml);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
@@ -88,11 +94,19 @@ public class GeneratorApp extends Application {
             in.close();
         }
         
+        if (isDefinition) {
+            this.definitionPane = page;
+        }
+        
+        updateRoot(page);
+        return (Initializable) loader.getController();
+    }
+    
+    private void updateRoot(AnchorPane page) {
         root.getChildren().removeAll();
         root.getChildren().clear();
         root.getChildren().addAll(page);
-        return (Initializable) loader.getController();
-    }    
+    }
 
     public static void main(String[] args) {
         Application.launch(args);
