@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -7,13 +8,18 @@
 
 <AnchorPane prefHeight="750.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.generation.ServiceDefinitionController">
    <children>
-      <Button onAction="#processViewDefinition" layoutX="136.0" layoutY="581.0" mnemonicParsing="false" text="View Definition" />
+      <Button layoutX="136.0" layoutY="581.0" mnemonicParsing="false" onAction="#processViewDefinition" text="View Definition" />
       <Label layoutX="201.0" layoutY="175.0" prefHeight="40.0" prefWidth="158.0" text="Enter your Service Name" textAlignment="RIGHT" />
       <TextField fx:id="serviceName" layoutX="391.0" layoutY="182.0" prefHeight="26.0" prefWidth="190.0" />
       <TextField fx:id="resourceName" layoutX="391.0" layoutY="251.0" prefHeight="26.0" prefWidth="190.0" />
       <Label layoutX="196.0" layoutY="244.0" prefHeight="40.0" prefWidth="163.0" text="Enter your Resource Name" textAlignment="RIGHT" />
       <Label layoutX="175.0" layoutY="312.0" prefHeight="40.0" prefWidth="190.0" text="Enter your Resource Properties" textAlignment="RIGHT" />
-      <Button onAction="#processTestService" layoutX="554.0" layoutY="581.0" mnemonicParsing="false" text="Test Service" />
+      <Button layoutX="554.0" layoutY="581.0" mnemonicParsing="false" onAction="#processTestService" text="Test Service" />
       <TextArea fx:id="resourceDefinition" layoutX="391.0" layoutY="324.0" prefHeight="164.0" prefWidth="190.0" />
+      <ImageView fitHeight="150.0" fitWidth="527.0" layoutX="112.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../resources/GCP.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
