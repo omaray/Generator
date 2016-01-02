@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -20,6 +21,7 @@ public class ServiceTrialController extends AnchorPane implements Initializable 
     private String resourceName;
     private List<Pair<String,String>> parameters;
     
+    private boolean localMode;
     private DirectoryGenerator directoryManager;
     private ProtoGenerator protoGenerator;
     private JavaProtoGenerator javaProtoGenerator;
@@ -29,7 +31,10 @@ public class ServiceTrialController extends AnchorPane implements Initializable 
     private ServerCompiler serverCompiler;
     private ServerRunner serverRunner;
     private ClientCompiler clientCompiler;
-    private ClientRunner clientRunner;
+    private ClientRunner clientRunnerLocal;
+    private ClientRunner clientRunnerDocker;
+    DockerFileGenerator dockerFileGenerator;
+    DockerContainerRunner dockerContainerRunner;
     
     @FXML Label createId;
     @FXML Label deleteId;
@@ -43,6 +48,7 @@ public class ServiceTrialController extends AnchorPane implements Initializable 
     @FXML TextArea updateFields;
     @FXML TextArea getResult;
     @FXML TextArea listResult;
+    @FXML Button deployButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -66,6 +72,8 @@ public class ServiceTrialController extends AnchorPane implements Initializable 
     }
     
     public void setup() {
+        this.localMode = true;
+        
         this.directoryManager = new DirectoryGenerator();
         this.directoryManager.clear();
         this.directoryManager.generate();
@@ -88,38 +96,43 @@ public class ServiceTrialController extends AnchorPane implements Initializable 
         this.clientCompiler = new ClientCompiler(serviceName);
         clientCompiler.execute();
         
+        this.clientRunnerLocal = null;
+        this.clientRunnerDocker = null;
+        
+        this.dockerFileGenerator = new DockerFileGenerator(serviceName);
+        this.dockerContainerRunner = new DockerContainerRunner();
+        
         this.serverCompiler = new ServerCompiler(serviceName);
         this.serverCompiler.execute();
         
         this.serverRunner = new ServerRunner(serviceName);
         this.serverRunner.execute();
         
-        initializeTextInputs();
+        initializeControls();
     }
     
     public void processCreate(ActionEvent event) {
         ArrayList<Object> arguments = processCreateUpdateHelper(this.createIdValue, this.createFields);
-        initializeClientRunner("localhost");
-        this.clientRunner.create(arguments);
+        ClientRunner clientRunner = getClientRunner();
+        clientRunner.create(arguments);
     }
     
     public void processUpdate(ActionEvent event) {
         ArrayList<Object> arguments = processCreateUpdateHelper(this.updateIdValue, this.updateFields);
-        initializeClientRunner("localhost");
-        this.clientRunner.update(arguments);
+        ClientRunner clientRunner = getClientRunner();
+        clientRunner.update(arguments);
     }
 
     public void processDelete(ActionEvent event) {
         ArrayList<Object> arguments = processDeleteGetHelper(this.deleteIdValue);
-        initializeClientRunner("localhost");
-        this.clientRunner.delete(arguments);
+        ClientRunner clientRunner = getClientRunner();
+        clientRunner.delete(arguments);
     }
 
     public void processGet(ActionEvent event) {
         ArrayList<Object> arguments = processDeleteGetHelper(this.getIdValue);
-        initializeClientRunner("localhost");
-        
-        Object result = this.clientRunner.get(arguments);
+        ClientRunner clientRunner = getClientRunner();
+        Object result = clientRunner.get(arguments);
         if (result != null) {
             this.getResult.setText(result.toString());
         } else {
@@ -128,9 +141,8 @@ public class ServiceTrialController extends AnchorPane implements Initializable 
     }
     
     public void processList(ActionEvent event) {
-        initializeClientRunner("localhost");
-        
-        Object result = this.clientRunner.list(new ArrayList<Object>());
+        ClientRunner clientRunner = getClientRunner();
+        Object result = clientRunner.list(new ArrayList<Object>());
         if (result != null) {
             this.listResult.setText(result.toString());
         } else {
@@ -140,6 +152,19 @@ public class ServiceTrialController extends AnchorPane implements Initializable 
     
     public void processStop(ActionEvent event) {
         this.serverRunner.shutdown();
+    }
+    
+    public void processDeploy(ActionEvent event) {
+        this.localMode = false;
+        if (this.clientRunnerLocal != null) {
+            this.clientRunnerLocal.shutdown();
+            this.clientRunnerLocal = null;
+        }
+        
+        this.serverRunner.shutdown();
+        this.dockerFileGenerator.generate();
+        this.dockerContainerRunner.execute();
+        this.deployButton.setText("Deployed!");
     }
     
     public void processViewClient(ActionEvent event) {
@@ -159,15 +184,23 @@ public class ServiceTrialController extends AnchorPane implements Initializable 
     }
     
     public void processReturnToDefinition(ActionEvent event) {
+        if (this.clientRunnerLocal != null) {
+            this.clientRunnerLocal.shutdown();
+        }
+        
+        if (this.clientRunnerDocker != null) {
+            this.clientRunnerDocker.shutdown();
+        }
+        
         this.serverRunner.shutdown();
         application.navigateToServiceDefinition();
     }
     
-    private void initializeTextInputs() {
-        createId.setText(parameters.get(0).getLeft());
-        deleteId.setText(parameters.get(0).getLeft());
-        updateId.setText(parameters.get(0).getLeft());
-        getId.setText(parameters.get(0).getLeft());
+    private void initializeControls() {
+        this.createId.setText(parameters.get(0).getLeft());
+        this.deleteId.setText(parameters.get(0).getLeft());
+        this.updateId.setText(parameters.get(0).getLeft());
+        this.getId.setText(parameters.get(0).getLeft());
         
         this.createIdValue.setText("");
         this.updateIdValue.setText("");
@@ -178,6 +211,8 @@ public class ServiceTrialController extends AnchorPane implements Initializable 
         this.listResult.setText("");
         initializeFields(this.createFields);
         initializeFields(this.updateFields);
+        
+        this.deployButton.setText("Deploy");
     }
     
     private void initializeFields(TextArea textArea) {
@@ -191,11 +226,26 @@ public class ServiceTrialController extends AnchorPane implements Initializable 
         textArea.setText(sb.toString());
     }
     
-    private void initializeClientRunner(String host) {
-        if (this.clientRunner == null) {
-            this.clientRunner = new ClientRunner(this.serviceName, host, this.parameters);
-            clientRunner.execute();
+    private ClientRunner getClientRunner() {
+        ClientRunner clientRunner = null;
+        
+        if (this.localMode) {
+            if (this.clientRunnerLocal == null) {
+                this.clientRunnerLocal = new ClientRunner(this.serviceName, Constants.LOCALHOST, this.parameters);
+                this.clientRunnerLocal.execute();
+            }
+            
+            clientRunner = this.clientRunnerLocal;
+        } else {
+            if (this.clientRunnerDocker == null) {
+                this.clientRunnerDocker = new ClientRunner(this.serviceName, Constants.REMOTEHOST, this.parameters);
+                this.clientRunnerDocker.execute();
+            }
+            
+            clientRunner = this.clientRunnerDocker;
         }
+        
+        return clientRunner;
     }
     
     private ArrayList<Object> processCreateUpdateHelper(TextField idValue, TextArea actionFields) {

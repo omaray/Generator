@@ -55,7 +55,8 @@ public class Constants {
     
     // Used mainly by the ClientRunner
     public static final String CLIENT_CLASS_FILE_EXTENSION = "Client";
-    public static final String HOST = "localhost";
+    public static final String LOCALHOST = "localhost";
+    public static final String REMOTEHOST = "192.168.99.100";
     public static final int PORT = 50051;
 
     // Used mainly by DockerFileGenerator and DockerContainerRunner

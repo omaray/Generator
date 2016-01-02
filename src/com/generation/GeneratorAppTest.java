@@ -93,7 +93,7 @@ public class GeneratorAppTest {
         }
 
         // Update the client's endpoint and create a Person
-        ClientRunner clientRunnerDocker = new ClientRunner(serviceName, "192.168.99.100", parameters);
+        ClientRunner clientRunnerDocker = new ClientRunner(serviceName, Constants.REMOTEHOST, parameters);
         clientRunnerDocker.execute();
         ArrayList<Object> argCreateDocker = new ArrayList<Object>();
         argCreateDocker.add(new Integer(9));
