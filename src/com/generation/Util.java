@@ -249,6 +249,20 @@ public class Util {
         file.delete();
     }
     
+    public static Object instantiateObjectFromUserInput(String value, String type) {
+        if (type.equals("string")) {
+            return value;
+        } else if (type.equals("number")) {
+            return Integer.parseInt(value);
+        } else if (type.equals("bool")) {
+            return Boolean.parseBoolean(value);
+        } else if (type.equals("double")) {
+            return Double.parseDouble("value");
+        }
+        
+        return null;
+    }
+    
     public static String upperCamelToUpperUnderscore(String name) {
         return CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, name);
     }

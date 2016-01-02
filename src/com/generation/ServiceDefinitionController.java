@@ -23,7 +23,13 @@ public class ServiceDefinitionController extends AnchorPane implements Initializ
     public void initialize(URL location, ResourceBundle resources) {
         serviceName.setText("AddressBook");
         resourceName.setText("Person");
-        resourceDefinition.setText("name: string");
+        StringBuilder sb = new StringBuilder();
+        sb.append("id: number");
+        sb.append("\n");
+        sb.append("name: string");
+        sb.append("\n");
+        sb.append("email: string");
+        resourceDefinition.setText(sb.toString());
     }
 
     public void setApp(GeneratorApp application){
