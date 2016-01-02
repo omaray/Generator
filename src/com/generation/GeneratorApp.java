@@ -1,105 +1,100 @@
 package com.generation;
 
-import java.util.ArrayList;
+import java.io.InputStream;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class GeneratorApp {
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.fxml.JavaFXBuilderFactory;
+import javafx.scene.Group;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+
+public class GeneratorApp extends Application {
+    private Group root = new Group();
     
+    @Override 
+    public void start(Stage primaryStage) throws Exception {
+         primaryStage.setResizable(false);
+         primaryStage.setScene(new Scene(createInitialContent()));
+         primaryStage.show();
+    }
+    
+    public void navigateToServiceDefinition(){
+        gotoServiceDefinition();
+    }
+    
+    public void navigateToServiceTrial() {
+        gotoServiceTrial();
+    }
+    
+    public void navigateToServiceProto(String serviceName, String resourceName, List<Pair<String,String>> parameters) {
+        gotoServiceProto(serviceName, resourceName, parameters);
+    }
+    
+    private Parent createInitialContent() {
+        gotoServiceDefinition();
+        return root;
+    }
+    
+    private void gotoServiceDefinition() {
+        try {
+            ServiceDefinitionController definition = 
+                    (ServiceDefinitionController) replaceSceneContent("ServiceDefinition.fxml");
+            definition.setApp(this);
+        } catch (Exception ex) {
+            Logger.getLogger(GeneratorApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void gotoServiceTrial() {
+        try {
+            ServiceTrialController trial = 
+                    (ServiceTrialController) replaceSceneContent("ServiceTrial.fxml");
+            trial.setApp(this);
+        } catch (Exception ex) {
+            Logger.getLogger(GeneratorApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void gotoServiceProto(String serviceName, String resourceName, List<Pair<String,String>> parameters) {
+        try {
+            ServiceProtoController proto = 
+                    (ServiceProtoController) replaceSceneContent("ServiceProto.fxml");
+            proto.setApp(this);
+            proto.setServiceName(serviceName);
+            proto.setResourceName(resourceName);
+            proto.setParameters(parameters);
+            proto.loadProtoFile();
+        } catch (Exception ex) {
+            Logger.getLogger(GeneratorApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private Initializable replaceSceneContent(String fxml) throws Exception {
+        FXMLLoader loader = new FXMLLoader();
+        InputStream in = GeneratorApp.class.getResourceAsStream(fxml);
+        loader.setBuilderFactory(new JavaFXBuilderFactory());
+        loader.setLocation(GeneratorApp.class.getResource(fxml));
+        AnchorPane page;
+        try {
+            page = (AnchorPane) loader.load(in);
+        } finally {
+            in.close();
+        }
+        
+        root.getChildren().removeAll();
+        root.getChildren().clear();
+        root.getChildren().addAll(page);
+        return (Initializable) loader.getController();
+    }    
+
     public static void main(String[] args) {
-        DirectoryGenerator directoryManager = new DirectoryGenerator();
-        directoryManager.clear();
-        directoryManager.generate();
-        
-        // COLLECT INPUT FROM THE USER FROM THE UI
-        String serviceName = "AddressBook";
-        String resourceName = "Person";
-        ArrayList<Pair<String, String>> parameters = new ArrayList<Pair<String, String>>();
-        parameters.add(new Pair<String,String>("id", "number"));
-        parameters.add(new Pair<String,String>("name", "string"));
-        parameters.add(new Pair<String,String>("email", "string"));
-        // COLLECT INPUT FROM THE USER FROM THE UI
-        
-        ProtoGenerator protoGenerator = new ProtoGenerator(serviceName, resourceName, parameters);
-        protoGenerator.generate();
-        
-        JavaProtoGenerator javaProtoGenerator = new JavaProtoGenerator(Util.upperCamelToLowerUnderscore(serviceName));
-        javaProtoGenerator.generate();
-        
-        GrpcProtoGenerator grpcProtoGenerator = new GrpcProtoGenerator(Util.upperCamelToLowerUnderscore(serviceName));
-        grpcProtoGenerator.generate();
-        
-        ServerGenerator serverGenerator = new ServerGenerator(serviceName, resourceName, parameters);
-        serverGenerator.generate();
-        
-        ClientGenerator clientGenerator = new ClientGenerator(serviceName, resourceName, parameters);
-        clientGenerator.generate();
-        
-        ServerCompiler serverCompiler = new ServerCompiler(serviceName);
-        serverCompiler.execute();
-        
-        ServerRunner serverRunner = new ServerRunner(serviceName);
-        serverRunner.execute();
-        
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
-        ClientCompiler clientCompiler = new ClientCompiler(serviceName);
-        clientCompiler.execute();
-        
-        ClientRunner clientRunner = new ClientRunner(serviceName, "localhost", parameters);
-        clientRunner.execute();
-        
-        ArrayList<Object> argCreate1 = new ArrayList<Object>();
-        argCreate1.add(new Integer(1));
-        argCreate1.add(new String("eric"));
-        argCreate1.add(new String("eric@hotmail.com"));
-        clientRunner.create(argCreate1);
-        
-        ArrayList<Object> argCreate2 = new ArrayList<Object>();
-        argCreate2.add(new Integer(2));
-        argCreate2.add(new String("jean"));
-        argCreate2.add(new String("jean@hotmail.com"));
-        clientRunner.create(argCreate2);
-        
-        ArrayList<Object> argCreate3 = new ArrayList<Object>();
-        argCreate3.add(new Integer(3));
-        argCreate3.add(new String("mark"));
-        argCreate3.add(new String("mark@hotmail.com"));
-        clientRunner.create(argCreate3);
-        
-        List<?> result2 = (List<?>)clientRunner.list(new ArrayList<Object>());
-        for (Object o : result2) {
-            clientRunner.printResource(o);
-        }
-        
-        clientRunner.shutdown();
-        serverRunner.shutdown();
-
-        // Create the Dockerfile and run a container
-        DockerFileGenerator dockerFileGenerator = new DockerFileGenerator(serviceName);
-        dockerFileGenerator.generate();
-        DockerContainerRunner dockerContainerRunner = new DockerContainerRunner();
-        dockerContainerRunner.execute();
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        // Update the client's endpoint and create a Person
-        ClientRunner clientRunnerDocker = new ClientRunner(serviceName, "192.168.99.100", parameters);
-        clientRunnerDocker.execute();
-        ArrayList<Object> argCreateDocker = new ArrayList<Object>();
-        argCreateDocker.add(new Integer(9));
-        argCreateDocker.add(new String("riwa"));
-        argCreateDocker.add(new String("riwa@hotmail.com"));
-        clientRunnerDocker.create(argCreateDocker);
-        clientRunnerDocker.shutdown();
+        Application.launch(args);
     }
 }
