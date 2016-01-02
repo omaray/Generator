@@ -36,13 +36,15 @@ public class ServiceDefinitionController extends AnchorPane implements Initializ
     }
     
     private List<Pair<String,String>> getParameters(String text) {
-        // parse the TextArea here
         ArrayList<Pair<String,String>> parameters = new ArrayList<Pair<String,String>>();
-        parameters.add(new Pair<String,String>("id", "number"));
-        parameters.add(new Pair<String,String>("name", "string"));
-        parameters.add(new Pair<String,String>("email", "string"));
+        
+        String[] fields = resourceDefinition.getText().split("\n");
+        for (String field : fields) {
+            String[] fieldSplit = field.split("[ ]*:[ ]*");
+            Pair<String,String> parameter = new Pair<String,String>(fieldSplit[0], fieldSplit[1]);
+            parameters.add(parameter);
+        }
         
         return parameters;
     }
-
 }
