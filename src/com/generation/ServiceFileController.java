@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.generation.GeneratorApp.FileType;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -44,7 +46,25 @@ public class ServiceFileController extends AnchorPane implements Initializable {
         this.fileType = fileType;
     }
     
-    public void loadProtoFile() {
+    public void processReturnBack(ActionEvent event) {
+        if (this.fileType == GeneratorApp.FileType.Proto) {
+            application.navigateToServiceDefinition();
+        } else {
+            application.navigateToServiceTrialNoGeneration();
+        }
+    }
+    
+    public void loadFile() {
+        if (this.fileType == FileType.Proto) {
+            GeneratorApp.fileController.loadProtoFile();
+        } else if (this.fileType == FileType.Client) {
+            GeneratorApp.fileController.loadClientFile();
+        } else if (this.fileType == FileType.Server) {
+            GeneratorApp.fileController.loadServerFile();
+        }
+    }
+    
+    private void loadProtoFile() {
         ProtoGenerator protoGenerator = new ProtoGenerator(this.serviceName, this.resourceName, this.parameters);
         protoGenerator.generate();
 
@@ -54,25 +74,17 @@ public class ServiceFileController extends AnchorPane implements Initializable {
         textArea.setText(protoContent);
     }
     
-    public void loadClientFile() {
+    private void loadClientFile() {
         String clientContent = Util.readFromFile(
                 Constants.CLIENT_FILE_PATH + this.serviceName + Constants.CLIENT_FILE_EXTENSION);
         
         textArea.setText(clientContent);
     }
     
-    public void loadServerFile() {
+    private void loadServerFile() {
         String serverContent = Util.readFromFile(
                 Constants.SERVER_FILE_PATH + this.serviceName + Constants.SERVER_FILE_EXTENSION);
         
         textArea.setText(serverContent);
-    }
-    
-    public void processReturnBack(ActionEvent event) {
-        if (this.fileType == GeneratorApp.FileType.Proto) {
-            application.navigateToServiceDefinition();
-        } else {
-            application.navigateToServiceTrialNoGeneration();
-        }
     }
 }

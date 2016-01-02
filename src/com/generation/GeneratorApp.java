@@ -114,15 +114,7 @@ public class GeneratorApp extends Application {
             GeneratorApp.fileController.setResourceName(resourceName);
             GeneratorApp.fileController.setParameters(parameters);
             GeneratorApp.fileController.setFileType(fileType);
-            
-            if (fileType == FileType.Proto) {
-                GeneratorApp.fileController.loadProtoFile();
-            } else if (fileType == FileType.Client) {
-                GeneratorApp.fileController.loadClientFile();
-            } else if (fileType == FileType.Server) {
-                GeneratorApp.fileController.loadServerFile();
-            }
-            
+            GeneratorApp.fileController.loadFile();
         } catch (Exception ex) {
             Logger.getLogger(GeneratorApp.class.getName()).log(Level.SEVERE, null, ex);
         }

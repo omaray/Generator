@@ -117,15 +117,14 @@ public class ServiceTrialController extends AnchorPane implements Initializable 
 
     public void processDelete(ActionEvent event) {
         ArrayList<Object> arguments = processDeleteGetHelper(this.deleteIdValue);
-
         initializeClientRunner("localhost");
         this.clientRunner.delete(arguments);
     }
 
     public void processGet(ActionEvent event) {
         ArrayList<Object> arguments = processDeleteGetHelper(this.getIdValue);
-
         initializeClientRunner("localhost");
+        
         Object result = this.clientRunner.get(arguments);
         if (result != null) {
             this.getResult.setText(result.toString());
@@ -136,6 +135,7 @@ public class ServiceTrialController extends AnchorPane implements Initializable 
     
     public void processList(ActionEvent event) {
         initializeClientRunner("localhost");
+        
         Object result = this.clientRunner.list(new ArrayList<Object>());
         if (result != null) {
             this.listResult.setText(result.toString());
