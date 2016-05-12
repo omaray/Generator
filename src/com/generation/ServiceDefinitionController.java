@@ -21,15 +21,9 @@ public class ServiceDefinitionController extends AnchorPane implements Initializ
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        serviceName.setText("AddressBook");
-        resourceName.setText("Person");
-        StringBuilder sb = new StringBuilder();
-        sb.append("id: number");
-        sb.append("\n");
-        sb.append("name: string");
-        sb.append("\n");
-        sb.append("email: string");
-        resourceDefinition.setText(sb.toString());
+        serviceName.setPromptText("AddressBook");
+        resourceName.setPromptText("Person");
+        resourceDefinition.setPromptText("id: number");
     }
 
     public void setApp(GeneratorApp application){
