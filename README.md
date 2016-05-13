@@ -3,4 +3,4 @@ This program gives an example of how to take as input a Service Name with a Reso
 
 The program sits on top of JavaFx and hence gives a nice (but basic) user interface to play with.
 
-Note: this was project didn't use Maven and hence all the libraries were copied locally. There is also a dependency on the proto compiler executable. Perhaps a pom.xml file will be added in the future to show the libraries that are needed.
+Note: this project doesn't use Maven and hence all the libraries were copied locally. There is also a dependency on the proto compiler executable. Perhaps a pom.xml file will be added in the future to show the libraries that are needed.
